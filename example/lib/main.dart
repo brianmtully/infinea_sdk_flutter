@@ -15,7 +15,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  Map _deviceInfo = {};
+  String sdkVersion = '';
+  List _devicesInfo = [];
+
   PlatformException _errorMessage;
   List events = [];
   InfineaSdkFlutter infinea;
@@ -38,8 +40,8 @@ class _MyAppState extends State<MyApp> {
     infinea = InfineaSdkFlutter();
     try {
       await infinea.setDeveloperKey(
-        key: 'enterkeyhere',
-      );
+          key:
+              '3SQ4Ikv3VBHnG4ZlNWi4yYUDd/b3K2Xz4BMKwM3wA0n12nUSdhyO5k3fyklXG6g6W/QPWs0g1ELR5F53jwTcm46rkG2rAOG6PX1FiUzdQ6U=');
       print('set developer key');
     } catch (e) {
       print(e);
@@ -68,16 +70,16 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
             TextButton(
               onPressed: () async {
-                String sdkVersion = await InfineaSdkFlutter.sdkVersion;
-                setState(() {
-                  print(sdkVersion);
-                });
+                sdkVersion = await InfineaSdkFlutter.sdkVersion;
+                setState(() {});
               },
               child: Text('SDK VERSION'),
             ),
+            Text(sdkVersion),
             TextButton(
               onPressed: () async {
                 cancelListener = infinea.startListening((event) {
@@ -100,17 +102,19 @@ class _MyAppState extends State<MyApp> {
             TextButton(
               onPressed: () async {
                 try {
-                  _deviceInfo = await infinea.getConnectedDeviceInfo(type: -1);
-                  print(_deviceInfo);
+                  _devicesInfo = await infinea.getConnectedDevicesInfo();
+                  _errorMessage = null;
                 } catch (e) {
                   _errorMessage = e;
+                  _devicesInfo = null;
                 }
                 setState(() {});
               },
-              child: Text('Get Connected Device Info'),
+              child: Text('Get Connected Devices Info'),
             ),
-            _deviceInfo != null ? Text(_deviceInfo.toString()) : Container(),
+            _devicesInfo != null ? Text(_devicesInfo.toString()) : Container(),
             _errorMessage != null ? Text(_errorMessage.message) : Container(),
+            Text("Events:"),
             Text(events.toString()),
           ],
         ),
