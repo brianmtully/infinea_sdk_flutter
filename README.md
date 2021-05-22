@@ -1,15 +1,30 @@
-# infinea_sdk_flutter
+# Infinea SDK Plugin
 
-A new flutter plugin project.
+(https://pub.dev/packages/infinea_sdk_flutter)
 
-## Getting Started
+Flutter Plugin for Infinite Peripherals Infinea SDK. This plugin allows you to connect and use devices compatible with Infinea SDK.
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## Usage
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To use this plugin, add `infinea_sdk_flutter` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+You will need a application key and application id setup in the Infinite Peripherals Developer Portal
 
+## Using Infinea SDK
+
+
+### Example Usage
+
+```dart
+final InfineaSdkFlutter infinea = InfineaSdkFlutter();
+      await infinea.setDeveloperKey(key: 'enteryourapplicationkeyhere');
+      await infinea.connect();  
+    Function cancelListener = infinea.startListening((event) {
+      if (event['event'] == 'barcode') {
+        print(event['data']);
+      }
+    });
+    
+    await infinea.disconnect();)
+    cancelListener();
+
+```
