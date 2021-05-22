@@ -142,12 +142,12 @@ class InfineaSdkFlutter {
   /// This must be the first function that gets called, and a valid develop key must be passed in, and validated, BEFORE any other functions get executed.
   /// @param {string} key The developer key given by IPC
 
-  Future<Map> setDeveloperKey({String key}) async {
+  Future<Map?> setDeveloperKey({required String key}) async {
     try {
       final Map result = await _channel.invokeMethod('setDeveloperKey', [key]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -157,7 +157,7 @@ class InfineaSdkFlutter {
     try {
       return await _channel.invokeMethod('connect');
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -167,21 +167,23 @@ class InfineaSdkFlutter {
     try {
       return await _channel.invokeMethod('disconnect');
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Get the connected device info. Info will be passed to success function
   /// @param {SUPPORTED_DEVICE_TYPES} deviceType
 
-  Future<Map> getConnectedDeviceInfo({SUPPORTED_DEVICE_TYPES type}) async {
+  Future<Map> getConnectedDeviceInfo(
+      {required SUPPORTED_DEVICE_TYPES type}) async {
     try {
       final Map result =
           await _channel.invokeMethod('getConnectedDeviceInfo', type.index);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return {};
   }
 
   /// Get the all connected devices info. Info will be passed to success function
@@ -192,21 +194,23 @@ class InfineaSdkFlutter {
           await _channel.invokeMethod('getConnectedDevicesInfo');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return [];
   }
 
   ///  Set pass-thru sync
   ///  @param {bool} value true or false
 
-  Future<bool> setPassThroughSync({bool value}) async {
+  Future<bool> setPassThroughSync({required bool value}) async {
     try {
       final bool result =
-          await _channel.invokeMethod('setPassThroughSync', value);
+          await _channel.invokeMethod('setPassThroughSync', [value]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return false;
   }
 
   /// Get pass-thru sync enabled or disabled
@@ -216,32 +220,34 @@ class InfineaSdkFlutter {
       final bool result = await _channel.invokeMethod('getPassThroughSync');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return false;
   }
 
   /// Set the USB current
   /// @param {int} value Must be one of 500, 1000, 2100, 2400
 
-  Future<bool> setUSBChargeCurrent({int value}) async {
+  Future<int> setUSBChargeCurrent({required int value}) async {
     assert(value == 500 || value == 1000 || value == 2100 || value == 2400);
     try {
-      final bool result =
+      final int result =
           await _channel.invokeMethod('setUSBChargeCurrent', [value]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return -1;
   }
 
   /// Get current USB charge current
 
-  Future<bool> getUSBChargeCurrent() async {
+  Future<int?> getUSBChargeCurrent() async {
     try {
-      final bool result = await _channel.invokeMethod('getUSBChargeCurrent');
+      final int? result = await _channel.invokeMethod('getUSBChargeCurrent');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -249,12 +255,13 @@ class InfineaSdkFlutter {
   /// @param {int} timeIdle this is the idle time, connected or not, after which Linea will turn off. The default value is 5400 seconds (90 minutes)
   /// @param {int} timeDisconnected this is the time with no active program connection, after which Linea will turn off. The default value is 30 seconds
 
-  Future<void> setAutoOffWhenIdle({int timeIdle, int timeDisconnected}) async {
+  Future<void> setAutoOffWhenIdle(
+      {required int timeIdle, required int timeDisconnected}) async {
     try {
       return await _channel
           .invokeMethod('setAutoOffWhenIdle', [timeIdle, timeDisconnected]);
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -265,8 +272,9 @@ class InfineaSdkFlutter {
       final Map result = await _channel.invokeMethod('getBatteryInfo');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return {};
   }
 
   /// Power on the RF module. Continuously leaving the RF module powered on will drain battery.
@@ -276,8 +284,9 @@ class InfineaSdkFlutter {
       final bool result = await _channel.invokeMethod('rfInit');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return false;
   }
 
   /// Power down the RF module, when not in use.
@@ -287,77 +296,79 @@ class InfineaSdkFlutter {
       final bool result = await _channel.invokeMethod('rfClose');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return false;
   }
 
   /// Get the scan button mode
 
-  Future<bool> barcodeGetScanButtonMode() async {
+  Future<int> barcodeGetScanButtonMode() async {
     try {
-      final bool result =
+      final int result =
           await _channel.invokeMethod('barcodeGetScanButtonMode');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
+    return -1;
   }
 
   /// Enable or Disable scan button.
   /// @param {bool} scanButtonMode true or false
 
-  Future<bool> barcodeSetScanButtonMode({bool scanButtonMode}) async {
+  Future<bool?> barcodeSetScanButtonMode({required bool scanButtonMode}) async {
     try {
-      final bool result = await _channel
+      final bool? result = await _channel
           .invokeMethod('barcodeSetScanButtonMode', [scanButtonMode]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Get the current barcode scan mode, one of SCAN_MODES
-  Future<bool> barcodeGetScanMode() async {
+  Future<SCAN_MODES?> barcodeGetScanMode() async {
     try {
-      final bool result = await _channel.invokeMethod('barcodeGetScanMode');
-      return result;
+      final int result = await _channel.invokeMethod('barcodeGetScanMode');
+      return SCAN_MODES.values[result];
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Set a specific scan mode, one of SCAN_MODES
   /// @param {int} scanMode One of SCAN_MODES
 
-  Future<bool> barcodeSetScanMode({int scanMode}) async {
+  Future<bool?> barcodeSetScanMode({required SCAN_MODES scanMode}) async {
     try {
-      final bool result =
-          await _channel.invokeMethod('barcodeSetScanMode', [scanMode]);
+      final bool? result =
+          await _channel.invokeMethod('barcodeSetScanMode', [scanMode.index]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Start scan engine. Can be used for on screen scan button
 
-  Future<bool> barcodeStartScan() async {
+  Future<bool?> barcodeStartScan() async {
     try {
-      final bool result = await _channel.invokeMethod('barcodeStartScan');
+      final bool? result = await _channel.invokeMethod('barcodeStartScan');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Stop scan engine. If using an on screen scan button, call this after a barcode is read.
 
-  Future<bool> barcodeStopScan() async {
+  Future<bool?> barcodeStopScan() async {
     try {
-      final bool result = await _channel.invokeMethod('barcodeStopScan');
+      final bool? result = await _channel.invokeMethod('barcodeStopScan');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -366,51 +377,53 @@ class InfineaSdkFlutter {
   ///    @param {BOOL} enabled turns on or off beeping
   ///    @param {List<int>} data an array of integer values specifying pairs of tone(Hz) and duration(ms).
 
-  Future<bool> barcodeSetScanBeep({bool enabled, List<int> beepData}) async {
+  Future<bool?> barcodeSetScanBeep(
+      {required bool enabled, required List<int> beepData}) async {
     try {
-      final bool result = await _channel
+      final bool? result = await _channel
           .invokeMethod('barcodeSetScanBeep', [enabled, beepData]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Set sled's battery to charge iOS device.
   /// @param {bool} value true or false
 
-  Future<bool> setCharging({bool value}) async {
+  Future<bool?> setCharging({required bool value}) async {
     try {
-      final bool result = await _channel.invokeMethod('setCharging', [value]);
+      final bool? result = await _channel.invokeMethod('setCharging', [value]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Get information of a specific firmware file. Info will be passed to success function
   /// @param {string} resourcePath The path to resource file with "platforms/ios/www/resources" as the root folder, your files must be copied to here. If you have "platforms/ios/www/resources/test.txt", only pass "test.txt" as resourcePath parameter.
 
-  Future<bool> getFirmwareFileInformation({String resourcePath}) async {
+  Future<bool?> getFirmwareFileInformation(
+      {required String resourcePath}) async {
     try {
-      final bool result = await _channel
+      final bool? result = await _channel
           .invokeMethod('getFirmwareFileInformation', [resourcePath]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   ///Update firmware
   /// @param {string} resourcePath The path to resource file with "platforms/ios/www/resources" as the root folder, your files must be copied to here. If you have "platforms/ios/www/resources/test.txt", only pass "test.txt" as resourcePath parameter.
 
-  Future<bool> updateFirmwareData({String resourcePath}) async {
+  Future<bool?> updateFirmwareData({required String resourcePath}) async {
     try {
-      final bool result =
+      final bool? result =
           await _channel.invokeMethod('updateFirmwareData', [resourcePath]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -419,27 +432,29 @@ class InfineaSdkFlutter {
   /// @param {int} keyID the ID of the key to use. The key needs to be suitable for the provided algorithm.
   /// @param {Map} params optional algorithm parameters.
 
-  Future<bool> emsrSetEncryption(
-      {int encryption, int keyID, Map params}) async {
+  Future<bool?> emsrSetEncryption(
+      {required int encryption,
+      required int keyID,
+      required Map params}) async {
     try {
-      final bool result = await _channel
+      final bool? result = await _channel
           .invokeMethod('emsrSetEncryption', [encryption, keyID, params]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Set encryption active head
   /// @param {int} activeHead The encrypted head to use with all other emsr functions
 
-  Future<bool> emsrSetActiveHead({int activeHead}) async {
+  Future<bool?> emsrSetActiveHead({required int activeHead}) async {
     try {
-      final bool result =
+      final bool? result =
           await _channel.invokeMethod('emsrSetActiveHead', [activeHead]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
@@ -450,14 +465,14 @@ class InfineaSdkFlutter {
   /// @param {int} unmaskedDigitsAtEnd the number of digits to show in clear text at the end of the PAN, range from 0, to 4 (default is 4)
   /// @param {int} unmaskedDigitsAfter the number of digits to unmask after the PAN, i.e. 4 will give you the expiration, 7 will give expiration and service code (default is 0)
 
-  Future<bool> emsrConfigMaskedDataShowExpiration(
-      {bool showExpiration,
-      bool showServiceCode,
-      int unmaskedDigitsAtStart,
-      int unmaskedDigitsAtEnd,
-      int unmaskedDigitsAfter}) async {
+  Future<bool?> emsrConfigMaskedDataShowExpiration(
+      {required bool showExpiration,
+      required bool showServiceCode,
+      required int unmaskedDigitsAtStart,
+      required int unmaskedDigitsAtEnd,
+      required int unmaskedDigitsAfter}) async {
     try {
-      final bool result =
+      final bool? result =
           await _channel.invokeMethod('emsrConfigMaskedDataShowExpiration', [
         showExpiration,
         showServiceCode,
@@ -467,53 +482,53 @@ class InfineaSdkFlutter {
       ]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Check if encrypted head is tampered
 
-  Future<bool> emsrIsTampered() async {
+  Future<bool?> emsrIsTampered() async {
     try {
-      final bool result = await _channel.invokeMethod('emsrIsTampered');
+      final bool? result = await _channel.invokeMethod('emsrIsTampered');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Gets the key version from the keyID that is provided
   /// @param {int} keyID the ID of the key to get the version
 
-  Future<bool> emsrGetKeyVersion({int keyID}) async {
+  Future<bool?> emsrGetKeyVersion({required int keyID}) async {
     try {
-      final bool result =
+      final bool? result =
           await _channel.invokeMethod('emsrGetKeyVersion', [keyID]);
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Returns general information about the encrypted head - firmware version, ident, serial number
 
-  Future<Map> emsrGetDeviceInfo() async {
+  Future<Map?> emsrGetDeviceInfo() async {
     try {
-      final Map result = await _channel.invokeMethod('emsrGetDeviceInfo');
+      final Map? result = await _channel.invokeMethod('emsrGetDeviceInfo');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 
   /// Returns a string of iHUB Port Info
 
-  Future<String> iHUBGetPortsInfo() async {
+  Future<String?> iHUBGetPortsInfo() async {
     try {
-      final String result = await _channel.invokeMethod('iHUBGetPortsInfo');
+      final String? result = await _channel.invokeMethod('iHUBGetPortsInfo');
       return result;
     } catch (error) {
-      return error;
+      print(error);
     }
   }
 

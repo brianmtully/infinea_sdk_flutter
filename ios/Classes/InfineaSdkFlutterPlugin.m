@@ -246,16 +246,16 @@ return self;
 
  }
 
- - (void)setPassThroughSync:(BOOL)echo result:(FlutterResult)result
+ - (void)setPassThroughSync:(NSArray*)arguments result:(FlutterResult)result
 {
    NSLog(@"Call setPassThroughSync");
 
-   // BOOL echo = [command.arguments objectAtIndex:0];
+   BOOL echo = [arguments objectAtIndex:0];
 
    NSError *error;
    BOOL isSuccess = [self.ipc setPassThroughSync:echo error:&error];
    if (!error || isSuccess) {
-       NSNumber* output=[NSNumber numberWithBool:isSuccess];
+       NSNumber* output=[NSNumber numberWithBool:echo];
        result(output);
    } else {
        NSString *errorCode = @"Error";
@@ -272,7 +272,7 @@ return self;
      BOOL isEnable = NO;
      BOOL isSuccess = [self.ipc getPassThroughSync:&isEnable error:&error];
      if (!error || isSuccess) {
-         NSNumber* output=[NSNumber numberWithBool:isSuccess];
+         NSNumber* output=[NSNumber numberWithBool:isEnable];
          result(output);
      } else {
        NSString *errorCode = @"Error";
@@ -288,7 +288,7 @@ return self;
       NSError *error;
       BOOL isSuccess = [self.ipc setUSBChargeCurrent:value error:&error];
       if (!error || isSuccess) {
-          NSNumber* output=[NSNumber numberWithBool:isSuccess];
+          NSNumber* output=[NSNumber numberWithBool:value];
           result(output);
       } else {
        NSString *errorCode = @"Error";
@@ -305,7 +305,7 @@ return self;
       int current = 0;
       BOOL isSuccess = [self.ipc getUSBChargeCurrent:&current error:&error];
       if (!error || isSuccess) {
-          NSNumber* output=[NSNumber numberWithBool:isSuccess];
+          NSNumber* output = [NSNumber numberWithInt:current];
           result(output);
       } else {
        NSString *errorCode = @"Error";
@@ -396,7 +396,7 @@ return self;
     int scanButtonMode = 1;
     BOOL isSuccess = [self.ipc barcodeGetScanButtonMode:&scanButtonMode error:&error];
     if (!error || isSuccess) {
-        NSNumber* output=[NSNumber numberWithBool:isSuccess];
+        NSNumber* output = [NSNumber numberWithInt:scanButtonMode];
         result(output);
     } else {
         NSString *errorCode = @"Error";
@@ -431,7 +431,7 @@ return self;
     int scanMode = 1;
     BOOL isSuccess = [self.ipc barcodeGetScanMode:&scanMode error:&error];
     if (!error || isSuccess) {
-        NSNumber* output=[NSNumber numberWithBool:isSuccess];
+        NSNumber* output = [NSNumber numberWithInt:scanMode];
         result(output);
     } else {
         NSString *errorCode = @"Error";
@@ -508,7 +508,7 @@ return self;
 
     BOOL isSuccess =[self.ipc barcodeSetScanBeep:enabled volume:volume beepData:beepData length:(int)sizeof(beepData) error:&beepError];
     if (!beepError || isSuccess) {
-        NSNumber* output=[NSNumber numberWithBool:isSuccess];
+        NSNumber* output=[NSNumber numberWithBool:enabled];
         result(output);
     } else {
         NSString *errorCode = @"Error";

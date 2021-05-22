@@ -14,11 +14,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   String sdkVersion = '';
   List _devicesInfo = [];
-
-  PlatformException _errorMessage;
+  bool passThroughSyncReturnValue = false;
+  String _errorMessage;
   List events = [];
   InfineaSdkFlutter infinea;
   Function cancelListener;
@@ -105,17 +104,39 @@ class _MyAppState extends State<MyApp> {
                   _devicesInfo = await infinea.getConnectedDevicesInfo();
                   _errorMessage = null;
                 } catch (e) {
-                  _errorMessage = e;
+                  _errorMessage = e.toString();
                   _devicesInfo = null;
                 }
                 setState(() {});
               },
               child: Text('Get Connected Devices Info'),
             ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  if (passThroughSyncReturnValue == true) {
+                    passThroughSyncReturnValue =
+                        await infinea.setPassThroughSync(value: false);
+                  } else {
+                    passThroughSyncReturnValue =
+                        await infinea.setPassThroughSync(value: true);
+                  }
+                  setState(() {
+                    _errorMessage = null;
+                  });
+                } catch (e) {
+                  setState(() {
+                    _errorMessage = e.toString();
+                  });
+                }
+              },
+              child: Text('Set Passthrough Sync'),
+            ),
             _devicesInfo != null ? Text(_devicesInfo.toString()) : Container(),
-            _errorMessage != null ? Text(_errorMessage.message) : Container(),
+            _errorMessage != null ? Text(_errorMessage) : Container(),
             Text("Events:"),
             Text(events.toString()),
+            Text(passThroughSyncReturnValue.toString()),
           ],
         ),
       ),
