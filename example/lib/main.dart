@@ -38,9 +38,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     infinea = InfineaSdkFlutter();
     try {
-      await infinea.setDeveloperKey(
-          key:
-              '3SQ4Ikv3VBHnG4ZlNWi4yYUDd/b3K2Xz4BMKwM3wA0n12nUSdhyO5k3fyklXG6g6W/QPWs0g1ELR5F53jwTcm46rkG2rAOG6PX1FiUzdQ6U=');
+      await infinea.setDeveloperKey(key: 'enteryourdeveloperkeyhere');
       print('set developer key');
     } catch (e) {
       print(e);

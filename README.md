@@ -7,7 +7,7 @@ Flutter Plugin for Infinite Peripherals Infinea SDK. This plugin allows you to c
 ## Usage
 
 To use this plugin, add `infinea_sdk_flutter` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
-You will need a application key and application id setup in the Infinite Peripherals Developer Portal
+You will need a developer key and application id setup in the Infinite Peripherals Developer Portal
 
 ## Using Infinea SDK
 
@@ -16,7 +16,7 @@ You will need a application key and application id setup in the Infinite Periphe
 
 ```dart
 final InfineaSdkFlutter infinea = InfineaSdkFlutter();
-      await infinea.setDeveloperKey(key: 'enteryourapplicationkeyhere');
+      await infinea.setDeveloperKey(key: 'enteryourdeveloperkeyhere');
       await infinea.connect();  
     Function cancelListener = infinea.startListening((event) {
       if (event['event'] == 'barcode') {
