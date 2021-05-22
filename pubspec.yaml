@@ -1,6 +1,6 @@
 name: infinea_sdk_flutter
 description: Flutter Plugin for Infinite Peripherals Infinea SDK. This plugin allows you to connect and use devices compatible with Infinea SDK.
-version: 0.0.1
+version: 0.0.1+1
 homepage: https://github.com/brianmtully/infinea_sdk_flutter
 
 environment:
