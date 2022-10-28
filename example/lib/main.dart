@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:infinea_sdk_flutter/infinea_sdk_flutter.dart';
 
 void main() {
@@ -38,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     infinea = InfineaSdkFlutter();
     try {
-      await infinea.setDeveloperKey(key: 'enteryourdeveloperkeyhere');
+      await infinea.setDeveloperKey(key: 'yourdeveloperkeyhere');
       print('set developer key');
     } catch (e) {
       print(e);

@@ -1,6 +1,6 @@
 #import "InfineaSdkFlutterPlugin.h"
 #import <Foundation/Foundation.h>
-#import <InfineaSDK/InfineaSDK.h>
+#import <QuantumSDK/QuantumSDK.h>
 
 
 
