@@ -14,16 +14,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String sdkVersion = '';
-  List _devicesInfo = [];
+  List? _devicesInfo = [];
   bool passThroughSyncReturnValue = false;
-  String _errorMessage;
+  String? _errorMessage;
   List events = [];
-  InfineaSdkFlutter infinea;
-  Function cancelListener;
+  InfineaSdkFlutter? infinea;
+  Function? cancelListener;
 
   @override
   void dispose() {
-    cancelListener();
+    cancelListener!();
     super.dispose();
   }
 
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     infinea = InfineaSdkFlutter();
     try {
-      await infinea.setDeveloperKey(key: 'yourdeveloperkeyhere');
+      await infinea?.setDeveloperKey(key: 'yourdeveloperkeyhere');
       print('set developer key');
     } catch (e) {
       print(e);
@@ -78,27 +78,27 @@ class _MyAppState extends State<MyApp> {
             Text(sdkVersion),
             TextButton(
               onPressed: () async {
-                cancelListener = infinea.startListening((event) {
+                cancelListener = infinea?.startListening((event) {
                   if (event['event'] == 'barcode') {
                     setState(() {
                       events.add(event);
                     });
                   }
                 });
-                await infinea.connect();
+                await infinea?.connect();
               },
               child: Text('Connect'),
             ),
             TextButton(
               onPressed: () async {
-                await infinea.disconnect();
+                await infinea?.disconnect();
               },
               child: Text('Disconnect'),
             ),
             TextButton(
               onPressed: () async {
                 try {
-                  _devicesInfo = await infinea.getConnectedDevicesInfo();
+                  _devicesInfo = await infinea?.getConnectedDevicesInfo();
                   _errorMessage = null;
                 } catch (e) {
                   _errorMessage = e.toString();
@@ -112,11 +112,9 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async {
                 try {
                   if (passThroughSyncReturnValue == true) {
-                    passThroughSyncReturnValue =
-                        await infinea.setPassThroughSync(value: false);
+                    passThroughSyncReturnValue = await infinea?.setPassThroughSync(value: false) ?? false;
                   } else {
-                    passThroughSyncReturnValue =
-                        await infinea.setPassThroughSync(value: true);
+                    passThroughSyncReturnValue = await infinea?.setPassThroughSync(value: true) ?? false;
                   }
                   setState(() {
                     _errorMessage = null;
@@ -130,7 +128,7 @@ class _MyAppState extends State<MyApp> {
               child: Text('Set Passthrough Sync'),
             ),
             _devicesInfo != null ? Text(_devicesInfo.toString()) : Container(),
-            _errorMessage != null ? Text(_errorMessage) : Container(),
+            _errorMessage != null ? Text("$_errorMessage") : Container(),
             Text("Events:"),
             Text(events.toString()),
             Text(passThroughSyncReturnValue.toString()),
